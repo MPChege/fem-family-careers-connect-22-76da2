@@ -49,13 +49,24 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     }
   }, [currentIndex, displayImages.length]);
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.error('Image failed to load:', displayImages[currentIndex]?.src);
+    const target = e.currentTarget;
+    target.src = '/placeholder.svg';
+  };
+
+  const handleThumbnailError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.currentTarget;
+    target.src = '/placeholder.svg';
+  };
+
   return (
     <div className={cn("relative w-full max-w-5xl mx-auto", className)}>
       {/* Main Carousel Container */}
       <div className="relative group">
         {/* Decorative Background Elements */}
-        <div className="absolute -inset-4 bg-gradient-to-r from-fem-gold/10 via-transparent to-fem-terracotta/10 rounded-[2rem] blur-xl opacity-50" />
-        <div className="absolute -inset-2 bg-gradient-to-br from-fem-gold/5 to-fem-terracotta/5 rounded-[1.5rem]" />
+        <div className="absolute -inset-4 bg-gradient-to-r from-yellow-400/10 via-transparent to-orange-500/10 rounded-[2rem] blur-xl opacity-50" />
+        <div className="absolute -inset-2 bg-gradient-to-br from-yellow-400/5 to-orange-500/5 rounded-[1.5rem]" />
         
         {/* Main Image Container - More rectangular shape */}
         <div className="relative w-full h-[400px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-white/10">
@@ -68,10 +79,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
               alt={displayImages[currentIndex].alt} 
               className="w-full h-full object-cover transition-all duration-1000 ease-out" 
               draggable={false}
-              onError={(e) => {
-                console.error('Image failed to load:', displayImages[currentIndex].src);
-                e.currentTarget.src = '/placeholder.svg';
-              }}
+              onError={handleImageError}
             />
           )}
         </div>
@@ -111,7 +119,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
               className={cn(
                 "flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300",
                 index === currentIndex 
-                  ? "border-fem-gold shadow-lg scale-110" 
+                  ? "border-yellow-400 shadow-lg scale-110" 
                   : "border-white/30 hover:border-white/50 opacity-70 hover:opacity-100"
               )}
             >
@@ -119,9 +127,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
                 src={image.src}
                 alt={image.alt}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = '/placeholder.svg';
-                }}
+                onError={handleThumbnailError}
               />
             </button>
           ))}
@@ -140,7 +146,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
               <div className={cn(
                 "h-1.5 rounded-full transition-all duration-500 overflow-hidden", 
                 index === currentIndex 
-                  ? "w-16 bg-gradient-to-r from-fem-gold to-fem-terracotta shadow-lg" 
+                  ? "w-16 bg-gradient-to-r from-yellow-400 to-orange-500 shadow-lg" 
                   : "w-4 bg-white/30 hover:bg-white/50 group-hover/progress:w-8"
               )}>
                 {index === currentIndex && isAutoPlaying && (
